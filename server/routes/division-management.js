@@ -9,10 +9,10 @@ const multer = require('multer')
 
 
 router.route('/user/all')
-  .get( passportJWT, user.fetchAll);
+  .get( user.fetchAll );
 
 router.route('/user/single/:id')
-  .get(passportJWT, user.fetchById);
+  .get( user.fetchById );
 
 router.route('/user/register')
   .post( user.registerUser );

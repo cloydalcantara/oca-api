@@ -24,6 +24,7 @@ db.connect((err) => {
     }
     console.log('Connected to database');
 });
+
 global.db = db;
 
 
@@ -38,7 +39,6 @@ if (!process.env.NODE_ENV === 'test') {
 app.use(express.static('uploads'))
 app.use(bodyParser.json());
 // Routes
-app.use('/api', require('./routes/users'));
-app.use('/api', require('./routes/organizational-structure'));
+app.use('/', require('./routes/users'));
 
 module.exports = app;

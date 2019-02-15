@@ -89,34 +89,29 @@ module.exports = {
         res.json({data: "Employee Registered Successfully!"})
       }
     })
-
   },
   signIn: async (req, res, next) => {
-    // Generate token
     await db.query('SELECT * FROM users where employeeid = '+ req.body.employeeid , async function(err, result){
+      if(result.length === 0){
+        res.json({err: "Invalid Login. Please Check your Employee ID and Password!"})
+      }
       if(err){
         res.json({err: "Invalid Login. Please Check your Employee ID and Password!"})
-      }else{
+      }
+      if(result.length > 0){
+        
         bcrypt.compare(req.body.password, result[0].password, function(err, resb) {
+          console.log(resb)
           if (err){
-            res.json({success: false, message: "Invalid Login. Please Check your Employee ID and Password!"})
+            res.json({success: resb, message: "Invalid Login. Please Check your Employee ID and Password!"})
           }
-          if (res){
-            res.json({success: true, message: "Login successfully!", token: signToken(req.body)})
+          if (resb){
+            res.status(200).json({success: resb, message: "Login successfully!", token: signToken(req.body)})
           } else {
-            res.json({success: false, message: "Invalid Login. Please Check your Employee ID and Password!"})
+            res.json({success: resb, message: "Invalid Login. Please Check your Employee ID and Password!"})
           }
         })
       }
     })
-
-    // if(req.user && req.user.local && req.user.local.disabled){
-    //     res.status(200).json({ disabled: true });
-    // }else{
-    //     const token = signToken(req.user);
-    //     res.status(200).json({ token , data:req.user});
-    // }
-   
-    
   }
 }
